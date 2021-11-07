@@ -11,6 +11,14 @@ import '@/icons' // icon
 
 Vue.use(ElementUI)
 
+Vue.prototype.msgSuccess = function (msg) {
+	this.$message.success(msg)
+}
+
+Vue.prototype.msgError = function (msg) {
+	this.$message.error(msg)
+}
+
 Vue.config.productionTip = false
 
 new Vue({

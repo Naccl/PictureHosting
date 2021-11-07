@@ -1,21 +1,15 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Layout from '@/layout'
-import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
 import getPageTitle from '@/utils/get-page-title'
 
 Vue.use(VueRouter)
 
 const routes = [
 	{
-		path: '/login',
-		component: () => import('@/views/login/index'),
-		hidden: true
-	},
-	{
 		path: '/404',
 		component: () => import('@/views/404'),
+		meta: {title: '404 NOT FOUND'},
 		hidden: true
 	},
 	{
@@ -32,24 +26,24 @@ const routes = [
 		]
 	},
 	{
-		path: '/example',
+		path: '/pictureHosting',
 		component: Layout,
-		redirect: '/example/table',
-		name: 'Example',
-		meta: {title: 'Example', icon: 'el-icon-s-help'},
+		redirect: '/pictureHosting/setting',
+		name: 'PictureHosting',
+		meta: {title: '图床', icon: 'el-icon-s-help'},
 		children: [
 			{
-				path: 'tree',
-				name: 'Tree',
-				component: () => import('@/views/tree/index'),
-				meta: {title: 'Tree', icon: 'tree'}
+				path: 'setting',
+				name: 'Setting',
+				component: () => import('@/views/Setting'),
+				meta: {title: '配置', icon: 'el-icon-setting'}
 			},
 			{
-				path: 'tree',
-				name: 'Tree',
-				component: () => import('@/views/tree/index'),
-				meta: {title: 'Tree', icon: 'tree'}
-			}
+				path: 'manage',
+				name: 'Manage',
+				component: () => import('@/views/Manage'),
+				meta: {title: '管理', icon: 'el-icon-picture'}
+			},
 		]
 	},
 
@@ -63,15 +57,9 @@ const router = new VueRouter({
 	routes
 })
 
-router.beforeEach(async (to, from, next) => {
-	NProgress.start()
+router.beforeEach( (to, from, next) => {
 	document.title = getPageTitle(to.meta.title)
 	next()
 })
-
-router.afterEach(() => {
-	NProgress.done()
-})
-
 
 export default router

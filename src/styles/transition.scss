@@ -19,12 +19,12 @@
 
 .fade-transform-enter {
   opacity: 0;
-  transform: translateX(-100%);
+  transform: translateX(-10px);
 }
 
 .fade-transform-leave-to {
   opacity: 0;
-  transform: translateX(100%);
+  transform: translateX(10px);
 }
 
 /* breadcrumb transition */
@@ -36,7 +36,7 @@
 .breadcrumb-enter,
 .breadcrumb-leave-active {
   opacity: 0;
-  transform: translateX(100%);
+  transform: translateX(20px);
 }
 
 .breadcrumb-move {

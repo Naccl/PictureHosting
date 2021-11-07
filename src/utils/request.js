@@ -4,17 +4,21 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
 const request = axios.create({
-	baseURL: process.env.VUE_APP_BASE_API,
-	timeout: 5000
+	baseURL: 'https://api.github.com',
+	timeout: 10000
 })
 
 // request interceptor
 request.interceptors.request.use(config => {
 		NProgress.start()
+		const token = localStorage.getItem('githubToken')
+		if (token) {
+			config.headers.Authorization = `token ${token}`
+		}
 		return config
 	},
 	error => {
-		console.log(error)
+		console.info(error)
 		return Promise.reject(error)
 	}
 )
@@ -23,23 +27,11 @@ request.interceptors.request.use(config => {
 request.interceptors.response.use(response => {
 		NProgress.done()
 		const res = response.data
-		if (res.code !== 200) {
-			Message({
-				message: res.msg || 'Error',
-				type: 'error',
-				duration: 5000
-			})
-			return Promise.reject(new Error(res.message || 'Error'))
-		}
 		return res
 	},
 	error => {
-		console.error(error)
-		Message({
-			message: error.message,
-			type: 'error',
-			duration: 5000
-		})
+		console.info(error)
+		Message.error(error.message)
 		return Promise.reject(error)
 	}
 )

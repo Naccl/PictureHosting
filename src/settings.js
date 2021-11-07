@@ -3,7 +3,7 @@ module.exports = {
 	 * @type {string}
 	 * @description page title
 	 */
-	title: 'My Vue Admin Template',
+	title: 'Picture Hosting',
 
 	/**
 	 * @type {string}
