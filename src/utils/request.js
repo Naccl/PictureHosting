@@ -5,12 +5,17 @@ import 'nprogress/nprogress.css'
 
 const request = axios.create({
 	baseURL: 'https://api.github.com',
-	timeout: 10000
+	timeout: 10000,
 })
 
 // request interceptor
 request.interceptors.request.use(config => {
 		NProgress.start()
+		if (/get/i.test(config.method)) {
+			//get请求添加时间戳防止响应缓存
+			config.params = config.params || {}
+			config.params.t = new Date().getTime()
+		}
 		const token = localStorage.getItem('githubToken')
 		if (token) {
 			config.headers.Authorization = `token ${token}`

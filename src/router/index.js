@@ -30,7 +30,7 @@ const routes = [
 		component: Layout,
 		redirect: '/pictureHosting/setting',
 		name: 'PictureHosting',
-		meta: {title: '图床', icon: 'el-icon-s-help'},
+		meta: {title: '图床', icon: 'el-icon-picture'},
 		children: [
 			{
 				path: 'setting',
@@ -42,7 +42,7 @@ const routes = [
 				path: 'manage',
 				name: 'Manage',
 				component: () => import('@/views/Manage'),
-				meta: {title: '管理', icon: 'el-icon-picture'}
+				meta: {title: '管理', icon: 'el-icon-folder-opened'}
 			},
 		]
 	},

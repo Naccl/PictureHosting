@@ -26,7 +26,7 @@
 </template>
 
 <script>
-	import {getUserInfo} from "@/api/user";
+	import {getUserInfo} from "@/api/github";
 
 	export default {
 		name: "Setting",

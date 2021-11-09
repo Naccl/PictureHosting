@@ -11,7 +11,7 @@ export function getUserInfo(token) {
 	})
 }
 
-// 获取用户的仓库
+// 获取用户仓库列表
 export function getUserRepos(name) {
 	return request({
 		url: `/users/${name}/repos`,
@@ -19,7 +19,7 @@ export function getUserRepos(name) {
 	})
 }
 
-// 获取用户仓库下的目录
+// 获取用户仓库下指定目录的文件列表
 export function getReposContents(name, repos, path) {
 	return request({
 		url: `/repos/${name}/${repos}/contents${path}`,
@@ -27,10 +27,20 @@ export function getReposContents(name, repos, path) {
 	})
 }
 
-// 获取仓库默认分支
-export function getReposBranch(name, repos) {
+// 删除文件
+export function delFile(name, repos, filePath, data) {
 	return request({
-		url: `/repos/${name}/${repos}`,
-		method: 'GET'
+		url: `/repos/${name}/${repos}/contents/${filePath}`,
+		method: 'DELETE',
+		data
+	})
+}
+
+// 上传文件至仓库指定目录下
+export function upload(name, repos, path, fileName, data) {
+	return request({
+		url: `/repos/${name}/${repos}/contents${path}/${fileName}`,
+		method: 'PUT',
+		data
 	})
 }
