@@ -32,12 +32,19 @@
 			</div>
 		</el-row>
 
-		<el-drawer title="上传文件" :visible.sync="isDrawerShow" direction="rtl" size="30%" :wrapperClosable="false" :close-on-press-escape="false">
-			<el-col>
+		<el-drawer title="上传文件" :visible.sync="isDrawerShow" direction="rtl" size="40%" :wrapperClosable="false" :close-on-press-escape="false">
+			<el-row>
 				<el-radio v-model="nameType" label="1">使用源文件名</el-radio>
 				<el-radio v-model="nameType" label="2">使用UUID文件名</el-radio>
-				<el-button size="small" type="primary" icon="el-icon-upload" v-throttle="[submitUpload,`click`,3000]">上传至当前目录</el-button>
-			</el-col>
+				<el-button size="small" type="primary" icon="el-icon-upload" v-throttle="[submitUpload,`click`,3000]">确定上传</el-button>
+			</el-row>
+			<el-row>
+				当前目录：{{ realPath }}
+			</el-row>
+			<el-row>
+				<el-switch v-model="isCustomPath" active-text="自定义目录"></el-switch>
+				<el-input placeholder="例：oldFolder/newFolder/" v-model="customPath" :disabled="!isCustomPath" size="medium" style="margin-top: 10px"></el-input>
+			</el-row>
 			<el-upload ref="uploadRef" action="" :http-request="upload" drag multiple :file-list="uploadList" list-type="picture" :auto-upload="false">
 				<i class="el-icon-upload"></i>
 				<div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -82,6 +89,16 @@
 				nameType: '1',
 				uploadList: [],
 				isCDN: true,
+				isCustomPath: false,
+				customPath: '',
+			}
+		},
+		computed: {
+			realPath() {
+				if (this.isCustomPath) {
+					return `/${this.userInfo.login}/${this.activeRepos}/${this.customPath}`
+				}
+				return `/${this.userInfo.login}/${this.activeRepos}${this.activePath.join('/')}/`
 			}
 		},
 		created() {
@@ -213,7 +230,22 @@
 					message: "Add files via PictureHosting",
 					content: base64,
 				}
+
 				let path = this.activePath.join('/')
+				if (this.isCustomPath) {
+					if (this.customPath === '/') {
+						path = ''
+					} else {
+						path = this.customPath
+						if (path.charAt(0) !== '/') {
+							path = '/' + path
+						}
+						if (path.charAt(path.length - 1) === '/') {
+							path = path.substring(0, path.length - 1)
+						}
+					}
+				}
+
 				upload(this.userInfo.login, this.activeRepos, path, fileName, requestData).then(() => {
 					this.msgSuccess('上传成功')
 					data.onSuccess()
