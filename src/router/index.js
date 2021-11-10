@@ -44,6 +44,12 @@ const routes = [
 				component: () => import('@/views/Manage'),
 				meta: {title: '管理', icon: 'el-icon-folder-opened'}
 			},
+			{
+				path: 'help',
+				name: 'Help',
+				component: () => import('@/views/Help'),
+				meta: {title: '教程', icon: 'el-icon-s-opportunity'}
+			},
 		]
 	},
 
@@ -57,7 +63,7 @@ const router = new VueRouter({
 	routes
 })
 
-router.beforeEach( (to, from, next) => {
+router.beforeEach((to, from, next) => {
 	document.title = getPageTitle(to.meta.title)
 	next()
 })
