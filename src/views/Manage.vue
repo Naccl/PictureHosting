@@ -12,7 +12,7 @@
 		<el-alert title="只显示<img>标签支持的 apng,avif,bmp,gif,ico,cur,jpg,jpeg,jfif,pjpeg,pjp,png,svg,tif,tiff,webp 格式的图片，见 https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/img" type="warning" show-icon close-text="不再提示" v-if="hintShow1" @close="noDisplay(1)"></el-alert>
 		<el-alert title="仅支持获取1000个文件内的目录，超出则将请求失败" type="warning" show-icon close-text="不再提示" v-if="hintShow2" @close="noDisplay(2)"></el-alert>
 		<el-alert title="不可上传同名文件，否则将收到422错误码，如需替换，请先删除原文件" type="warning" show-icon close-text="不再提示" v-if="hintShow3" @close="noDisplay(3)"></el-alert>
-		<el-row>
+		<el-row v-viewer>
 			<div class="image-container" v-for="(file,index) in fileList" :key="index">
 				<el-image :src="imgUrl(file)" fit="scale-down"></el-image>
 				<div class="image-content">
@@ -267,6 +267,7 @@
 	.el-image {
 		width: 100%;
 		height: 100%;
+		z-index: 1;
 	}
 
 	.image-content {
@@ -288,6 +289,7 @@
 		color: #fff;
 		opacity: 0;
 		transition: opacity 0.5s;
+		z-index: 2;
 	}
 
 	.image-content .info span {
@@ -303,6 +305,7 @@
 		position: absolute;
 		right: 8px;
 		bottom: 8px;
+		z-index: 2;
 	}
 
 	.icon {
@@ -351,6 +354,7 @@
 		height: 0;
 		clip-path: polygon(0 100%, 100% 0, 100% 100%);
 		transition: 0.3s;
+		z-index: 2;
 	}
 
 	.image-container:hover .image-content::before {

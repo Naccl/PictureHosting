@@ -3,13 +3,23 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-import 'normalize.css/normalize.css' // A modern alternative to CSS resets
+// A modern alternative to CSS resets
+import 'normalize.css/normalize.css'
+// element-ui
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import '@/styles/index.scss' // global css
-import '@/icons' // icon
+// global css
+import '@/styles/index.scss'
+// icon
+import '@/icons'
+//v-viewer
+import 'viewerjs/dist/viewer.css'
+import Viewer from 'v-viewer'
+// directive
+import './utils/directive'
 
 Vue.use(ElementUI)
+Vue.use(Viewer)
 
 Vue.prototype.msgSuccess = function (msg) {
 	this.$message.success(msg)
