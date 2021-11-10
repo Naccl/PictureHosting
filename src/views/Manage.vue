@@ -11,7 +11,7 @@
 		</el-row>
 		<el-alert title="只显示<img>标签支持的 apng,avif,bmp,gif,ico,cur,jpg,jpeg,jfif,pjpeg,pjp,png,svg,tif,tiff,webp 格式的图片，见 https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/img" type="warning" show-icon close-text="不再提示" v-if="hintShow1" @close="noDisplay(1)"></el-alert>
 		<el-alert title="仅支持获取1000个文件内的目录，超出则将请求失败" type="warning" show-icon close-text="不再提示" v-if="hintShow2" @close="noDisplay(2)"></el-alert>
-		<el-alert title="不可上传同名文件，如需替换，请先删除原文件" type="warning" show-icon close-text="不再提示" v-if="hintShow3" @close="noDisplay(3)"></el-alert>
+		<el-alert title="不可上传同名文件，否则将收到422错误码，如需替换，请先删除原文件" type="warning" show-icon close-text="不再提示" v-if="hintShow3" @close="noDisplay(3)"></el-alert>
 		<el-row>
 			<div class="image-container" v-for="(file,index) in fileList" :key="index">
 				<el-image :src="imgUrl(file)" fit="scale-down"></el-image>
@@ -32,11 +32,11 @@
 			</div>
 		</el-row>
 
-		<el-drawer title="上传文件" :visible.sync="isDrawerShow" direction="rtl" size="50%" :wrapperClosable="false" :close-on-press-escape="false">
+		<el-drawer title="上传文件" :visible.sync="isDrawerShow" direction="rtl" size="30%" :wrapperClosable="false" :close-on-press-escape="false">
 			<el-col>
 				<el-radio v-model="nameType" label="1">使用源文件名</el-radio>
 				<el-radio v-model="nameType" label="2">使用UUID文件名</el-radio>
-				<el-button size="small" type="primary" icon="el-icon-upload" @click="submitUpload">上传至当前目录</el-button>
+				<el-button size="small" type="primary" icon="el-icon-upload" v-throttle="[submitUpload,`click`,3000]">上传至当前目录</el-button>
 			</el-col>
 			<el-upload ref="uploadRef" action="" :http-request="upload" drag multiple :file-list="uploadList" list-type="picture" :auto-upload="false">
 				<i class="el-icon-upload"></i>
@@ -48,10 +48,11 @@
 
 <script>
 	import SvgIcon from "@/components/SvgIcon";
+	import {getUserRepos, getReposContents, delFile, upload} from "@/api/github";
 	import {isImgExt} from "@/utils/validate";
 	import {randomUUID} from "@/utils/uuid";
 	import {copy} from "@/utils/copy";
-	import {getUserRepos, getReposContents, delFile, upload} from "@/api/github";
+	import {taskQueue} from "@/utils/task-queue";
 
 	export default {
 		name: "Manage",
@@ -80,7 +81,7 @@
 				isDrawerShow: false,
 				nameType: '1',
 				uploadList: [],
-				isCDN: true
+				isCDN: true,
 			}
 		},
 		created() {
@@ -150,6 +151,9 @@
 			noDisplay(id) {
 				localStorage.setItem(`hintShow${id}`, '1')
 			},
+			imgUrl(file) {
+				return this.isCDN ? `https://cdn.jsdelivr.net/gh/${this.userInfo.login}/${this.activeRepos}/${file.path}` : file.download_url
+			},
 			copy(type, file) {
 				// type 1 cdn link  2 Markdown
 				let imgUrl = `https://cdn.jsdelivr.net/gh/${this.userInfo.login}/${this.activeRepos}/${file.path}`
@@ -200,7 +204,8 @@
 					if (this.nameType === '2') {
 						fileName = randomUUID() + fileName.substr(fileName.lastIndexOf("."))
 					}
-					this.push2Github(data, fileName, base64)
+					//批量上传需要间隔时间，否则可能commit版本号冲突，返回409错误码，Status: 409 Conflict
+					taskQueue(() => this.push2Github(data, fileName, base64), 1000)
 				})
 			},
 			push2Github(data, fileName, base64) {
@@ -214,9 +219,6 @@
 					data.onSuccess()
 				})
 			},
-			imgUrl(file) {
-				return this.isCDN ? `https://cdn.jsdelivr.net/gh/${this.userInfo.login}/${this.activeRepos}/${file.path}` : file.download_url
-			}
 		},
 	}
 </script>
@@ -224,10 +226,7 @@
 <style>
 	.el-drawer__body {
 		margin: 0 20px;
-	}
-
-	.el-drawer__body .el-upload-list {
-		width: 450px;
+		overflow: auto;
 	}
 
 	.el-drawer__body .el-upload {
