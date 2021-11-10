@@ -21,5 +21,11 @@ module.exports = {
 	 * @type {boolean} true | false
 	 * @description Whether show the logo in sidebar
 	 */
-	sidebarLogo: true
+	sidebarLogo: true,
+
+	/**
+	 * @type {Array}
+	 * @description 默认展开的父级菜单
+	 */
+	defaultOpeneds: ['/pictureHosting']
 }

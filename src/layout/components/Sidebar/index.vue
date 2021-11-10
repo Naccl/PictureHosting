@@ -3,6 +3,7 @@
 		<logo v-if="showLogo" :collapse="isCollapse"/>
 		<el-scrollbar wrap-class="scrollbar-wrapper">
 			<el-menu
+					:default-openeds="defaultOpeneds"
 					:default-active="activeMenu"
 					:collapse="isCollapse"
 					:background-color="variables.menuBg"
@@ -26,6 +27,12 @@
 
 	export default {
 		components: {SidebarItem, Logo},
+		data() {
+			return {
+				//默认展开的父级菜单
+				defaultOpeneds: this.$store.state.settings.defaultOpeneds
+			}
+		},
 		computed: {
 			...mapGetters([
 				'sidebar'
