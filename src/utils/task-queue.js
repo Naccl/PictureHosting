@@ -6,6 +6,11 @@ let queue = []
 let timer = null
 
 function process() {
+	if (queue.length === 0) {
+		clearInterval(timer)
+		timer = null
+		return
+	}
 	let fn = queue.shift()
 	fn()
 	if (queue.length === 0) {
