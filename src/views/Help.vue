@@ -11,7 +11,7 @@
 					<el-link href="https://github.com/new" target="_blank" type="primary">创建一个仓库</el-link>
 					作为图床
 				</h3>
-				<img src="/img/new-repos.png" style="zoom: 80%"/>
+				<img src="@/assets/help_images/new-repos.png" style="zoom: 80%"/>
 			</div>
 
 			<div v-if="active==1">
@@ -24,22 +24,22 @@
 				<p>
 					2.在打开的 <b>New personal access token</b> 中选中<b>"public_repo"</b>，如下所示
 				</p>
-				<img src="/img/generate-token.png"/>
+				<img src="@/assets/help_images/generate-token.png"/>
 				<br>
 				<p>3.然后点击 Generate token 按钮，即可生成一个token，如下：</p>
 				<br>
-				<img src="/img/token.png"/>
+				<img src="@/assets/help_images/token.png"/>
 				<p style="color: red"><b>4.生成的TOKEN只会显示一次。记得保存！！</b></p>
 			</div>
 
 			<div v-if="active==2">
 				<h3>使用</h3>
 				<p>配置Token</p>
-				<img src="/img/setting-token.png"/>
+				<img src="@/assets/help_images/setting-token.png"/>
 				<p>查看图床</p>
-				<img src="/img/search.png" style="zoom: 80%"/>
+				<img src="@/assets/help_images/search.png" style="zoom: 80%"/>
 				<p>上传文件</p>
-				<img src="/img/upload.png"/>
+				<img src="@/assets/help_images/upload.png"/>
 			</div>
 			<div v-if="active==3">
 				<h2>OK！恭喜你完成使用教程！</h2>
