@@ -1,6 +1,6 @@
 # PictureHosting
 
-GitHub 图床管理工具，[在线预览](https://naccl.github.io/PictureHosting/)
+GitHub 图床管理工具，[在线预览](https://naccl.github.io/PictureHosting/)（由于众所周知的原因，请自备网络环境）
 
 基于 [GitHub API](https://docs.github.com/cn/rest)，使用 GitHub 仓库作为图床 + jsDelivr CDN 加速访问
 
